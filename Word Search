@@ -1,0 +1,56 @@
+// Problem Link - https://leetcode.com/problems/word-search/
+
+class Solution {
+public:
+
+    int dx[4] = {0, 0, -1, 1};
+    int dy[4] = {-1, 1, 0, 0};
+
+    bool isValid(int x, int y, int n, int m) {
+        return x >= 0 && y >= 0 && x < n && y < m;
+    }
+
+    bool check(int row, int col, int ind, int n, int m, string &word, vector<vector<char>> &board) {
+
+        if(board[row][col] != word[ind]) {
+            return false;
+        }
+
+        if(ind == word.length() - 1) {
+            return true;
+        }
+
+        char ch = board[row][col];
+        board[row][col] = '.';
+
+        for(int i = 0; i < 4; i++) {
+            int x = row + dx[i];
+            int y = col + dy[i];
+            if(!isValid(x, y, n, m)) continue;
+            if(check(x, y, ind + 1, n, m, word, board)) {
+                return true;
+            }
+        }
+
+        board[row][col] = ch;
+        return false;
+
+    }
+
+    bool exist(vector<vector<char>>& board, string word) {
+        
+        int n = board.size();
+        int m = board[0].size();
+
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < m; j++) {
+                if(check(i, j, 0, n, m, word, board)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+
+    }
+};
