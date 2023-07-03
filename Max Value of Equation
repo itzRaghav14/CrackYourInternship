@@ -1,0 +1,109 @@
+// === Segment Tree ===
+
+struct item{
+    int mx;
+};
+
+class segtree{
+public:
+    
+    vector<item> seg;
+    int n;
+    
+    item NEUTRAL_ELEMENT = {(int)(-1e9)};
+    
+    item single(int val){
+        return {val};
+    }
+    
+    item merge(item left, item right, int type = 1){
+        
+        item node = NEUTRAL_ELEMENT;
+        
+        node.mx = max(left.mx, right.mx);
+        
+        return node;
+        
+    }
+    
+    
+    segtree(vector<int> &arr, int size = -1){
+        if(size == -1) size = arr.size();
+        n = size;
+        seg.resize(4 * n + 1);
+        build(arr);
+    }
+    
+    void build(vector<int> &arr, int ind = 0, int low = 0, int high = -1){
+        if(high == -1) high = n -  1;
+        if(low == high){
+            seg[ind] = single(arr[low]);
+            return;
+        }
+        int mid = (low + high) / 2;
+        build(arr, 2 * ind + 1, low, mid);
+        build(arr, 2 * ind + 2, mid + 1, high);
+        seg[ind] = merge(seg[2 * ind + 1], seg[2 * ind + 2]);
+    }
+    
+    item query(int l, int r, int type = 1, int ind = 0, int low = 0, int high = -1){
+        if(high == -1) high = n - 1;
+        if(low > r || high < l){
+            return NEUTRAL_ELEMENT;
+        }
+        if(low >= l && high <= r) return seg[ind];
+        int mid = (low + high) / 2;
+        item left = query(l, r, 1, 2 * ind + 1, low, mid);
+        item right = query(l, r, 1, 2 * ind + 2, mid + 1, high);
+        return merge(left, right);        
+    }
+    
+    void update(int i, int v, int ind = 0, int low = 0, int high = -1){
+        if(high == -1) high = n - 1;
+        if(low == high){
+            seg[ind] = single(v);
+            return;
+        }
+        int mid = (low + high) / 2;
+        if(i <= mid) update(i, v, 2 * ind + 1, low, mid);
+        else update(i, v, 2 * ind + 2, mid + 1, high);
+        seg[ind] = merge(seg[2 * ind + 1], seg[2 * ind + 2]);
+    }
+};
+
+class Solution {
+public:
+    int findMaxValueOfEquation(vector<vector<int>>& points, int k) {
+        
+        ios_base::sync_with_stdio(false);
+        cin.tie(NULL);
+
+        int n = points.size();
+        int ans = -1e9;
+        vector<int> a(n), b(n);
+
+        for(int i = 0; i < n; i++) {
+            a[i] = points[i][0] + points[i][1];
+            b[i] = points[i][0];
+        }
+
+        for(auto it : a) cout << it << " "; cout << endl;
+        for(auto it : b) cout << it << " "; cout << endl;
+
+        segtree sg(a);
+
+        for(int i = 0; i < n; i++) {
+            int x = points[i][0];
+            int y = points[i][1];
+            int j = upper_bound(b.begin(), b.end(), x + k) - b.begin();
+            j--;
+            if(i == j) continue;
+            int mx = sg.query(i + 1, j).mx;
+            // cout << i << " " << j << " " << x << " " << y << " " << mx << " " << ans << " " << endl;
+            ans = max(ans, y + mx - x);
+        }
+
+        return ans;
+
+    }
+};
