@@ -1,0 +1,36 @@
+// Problem Link - https://leetcode.com/problems/3sum/
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        
+        int n = nums.size();
+        vector<vector<int>> ans;
+
+        sort(nums.begin(), nums.end());
+
+        for(int first = 0; first < n; first++) {
+            int second = first + 1, third = n - 1;
+            int target = -nums[first];
+            while(second < third) {
+                int sum = nums[second] + nums[third];
+                if(sum == target) {
+                    ans.push_back({nums[first], nums[second], nums[third]});
+                    while(second < third && nums[second] == nums[second + 1]) second++;
+                    while(second < third && nums[third] == nums[third - 1]) third--;
+                    second++;
+                    third--;
+                }
+                else if(sum > target) {
+                    third--;
+                } else {
+                    second++;
+                }
+            }
+            while(first + 1 < n && nums[first] == nums[first + 1]) first++;
+        }
+
+        return ans;
+
+    }
+};
