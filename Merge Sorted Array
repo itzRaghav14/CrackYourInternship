@@ -1,0 +1,33 @@
+class Solution {
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        
+        int first = m - 1, second = n - 1;
+        int ind = m + n - 1;
+
+        while(first >= 0 && second >= 0){
+            if(nums1[first] >= nums2[second]){
+                nums1[ind] = nums1[first];
+                ind--;
+                first--;
+            } else{
+                nums1[ind] = nums2[second];
+                ind--;
+                second--;
+            }
+        }
+
+        while(first >= 0){
+            nums1[ind] = nums1[first];
+            ind--;
+            first--;
+        }
+
+        while(second >= 0){
+            nums1[ind] = nums2[second];
+            ind--;
+            second--;
+        }
+
+    }
+};
