@@ -1,0 +1,21 @@
+// Problem Link - https://leetcode.com/problems/two-sum/
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        
+        int n = nums.size();
+        unordered_map<int, int> M;
+
+        for(int i = 0; i < n; i++) {
+            int tar = target - nums[i];
+            if(M.find(tar) != M.end()) {
+                return {M[tar], i};
+            }
+            M[nums[i]] = i;
+        }
+
+        return {};
+
+    }
+};
