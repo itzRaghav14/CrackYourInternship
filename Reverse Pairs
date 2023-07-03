@@ -1,0 +1,69 @@
+class Solution {
+public:
+
+    int findReversePairs(int lo, int mid, int hi, vector<int> &nums) {
+
+        int j = lo;
+        int cnt = 0;
+
+        for(int i = mid + 1; i <= hi; i++) {
+            while(j <= mid && 2L * nums[i] >= nums[j]) {
+                j++;
+            }
+            cnt += mid - j + 1;
+        }
+
+        return cnt;
+
+    }
+
+    int merge(int lo, int mid, int hi, vector<int> &nums) {
+
+        int res = findReversePairs(lo, mid, hi, nums);
+        vector<int> a(hi - lo + 1);
+
+        int i = lo, j = mid + 1, k = 0;
+        for(; i <= mid && j <= hi; k++) {
+            if(nums[i] < nums[j]) {
+                a[k] = nums[i];
+                i++;
+            } else {
+                a[k] = nums[j];
+                j++;
+            }
+        }
+
+        while(i <= mid) {
+            a[k] = nums[i];
+            i++, k++;
+        }
+
+        while(j <= hi) {
+            a[k] = nums[j];
+            j++, k++;
+        }
+
+        for(int k = lo; k <= hi; k++) {
+            nums[k] = a[k - lo];
+        }
+
+        return res;
+
+    }
+
+    int mergeSort(int lo, int hi, vector<int> &nums) {
+        if(lo < hi) {
+            int mid = (lo + hi) / 2;
+            int res = mergeSort(lo, mid, nums) + mergeSort(mid + 1, hi, nums);
+            return res + merge(lo, mid, hi, nums);
+        }
+        return 0;
+    }
+
+    int reversePairs(vector<int>& nums) {
+        
+        int n = nums.size();
+        return mergeSort(0, n - 1, nums);
+
+    }
+};
