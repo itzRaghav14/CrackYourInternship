@@ -1,0 +1,26 @@
+// Problem Link - https://leetcode.com/problems/sort-colors/
+
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        
+        int n = nums.size();
+        int lo = -1, hi = n;
+
+        // lo -> index of rightmost 0 till now
+        // hi -> index of leftmost 2 till now
+
+        for(int i = 0; i < hi; i++) {
+            if(nums[i] == 1) continue;
+            if(nums[i] == 0) {
+                lo++;
+                swap(nums[lo], nums[i]);
+            } else {
+                hi--;
+                swap(nums[hi], nums[i]);
+                i--;
+            }
+        }
+
+    }
+};
