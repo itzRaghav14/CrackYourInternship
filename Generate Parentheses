@@ -1,0 +1,38 @@
+class Solution {
+public:
+
+    void generate(int open, int close, string &seq, vector<string> &combinations) {
+
+        // base case
+        if(close == 0) {
+            combinations.push_back(seq);
+            return;
+        }
+
+        // open bracket
+        if(open > 0) {
+            seq.push_back('(');
+            generate(open - 1, close, seq, combinations);
+            seq.pop_back();
+        }
+
+        // close bracket
+        if(close > open) {
+            seq.push_back(')');
+            generate(open, close - 1, seq, combinations);
+            seq.pop_back();
+        }
+
+    }
+
+    vector<string> generateParenthesis(int n) {
+        
+        vector<string> combinations;
+        string seq = "";
+
+        generate(n, n, seq, combinations);
+
+        return combinations;
+
+    }
+};
