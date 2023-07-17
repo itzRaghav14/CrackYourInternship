@@ -1,0 +1,61 @@
+class Solution{
+    
+private: 
+    bool contains(vector<int> &freq, vector<int> &req) {
+        for(int i = 0; i < 26; i++) {
+            if(req[i] > freq[i]) return false;
+        }
+        return true;
+    }
+    
+public:
+    
+    string smallestWindow (string &str, string &tar){
+        
+        int n = str.length();
+        int m = tar.length();
+        
+        vector<int> freq(26);
+        vector<int> req(26);
+        
+        for(int i = 0; i < m; i++) {
+            char ch = tar[i];
+            int idx = ch - 'a';
+            req[idx]++;
+        }
+        
+        int ansLength = n + 1;
+        int ansStart = -1;
+        
+        int start = 0;
+        
+        for(int end = 0; end < n; end++) {
+            char ch = str[end];
+            int idx = ch - 'a';
+            freq[idx]++;
+            
+            while(start <= end) {
+                char chStart = str[start];
+                int idxStart = chStart - 'a';
+                if(freq[idxStart] <= req[idxStart]) break;
+                freq[idxStart]--;
+                start++;
+            }
+            
+            if(contains(freq, req)) {
+                int len = end - start + 1;
+                if(len < ansLength) {
+                    ansLength = len;
+                    ansStart = start;
+                }
+            }
+        }
+        
+        if(ansStart == -1) {
+            return "-1";
+        }
+        
+        return str.substr(ansStart, ansLength);
+        
+    }
+};
