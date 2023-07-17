@@ -1,0 +1,58 @@
+class Solution {
+public:
+
+    stack<string> reverse(stack<string> &st) {
+
+        stack<string> revStack;
+        while(!st.empty()) {
+            revStack.push(st.top());
+            st.pop();
+        }
+
+        return revStack;
+
+    }
+
+    string simplifyPath(string path) {
+        
+        int n = path.size();
+        string canonicalPath = "";
+        stack<string> st;
+
+        for(int i = 0; i < n; i++) {
+            if(path[i] == '/') continue;
+
+            string file = "";
+            int j = i;
+            
+            while(j < n && path[j] != '/') {
+                file.push_back(path[j]);
+                j++;
+            }
+
+            i = j;
+
+            if(file == ".") {}
+            
+            else if(file == "..") {
+                if(!st.empty()) st.pop();
+            }
+
+            else {
+                st.push(file);
+            }
+        }
+
+        st = reverse(st);
+
+        while(!st.empty()) {
+            canonicalPath += "/" + st.top();
+            st.pop();
+        }
+
+        if(canonicalPath.empty()) return "/";
+
+        return canonicalPath;
+
+    }
+};
