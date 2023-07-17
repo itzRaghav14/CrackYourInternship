@@ -1,0 +1,46 @@
+class Solution {
+public:
+
+    string convertToRoman(int &num, int val, char one, char five, char ten) {
+
+        string res = "";
+
+        if(num >= 9 * val) {
+            res += one;
+            res += ten;
+            num -= 9 * val;
+        }
+
+        if(num >= 5 * val) {
+            res += five;
+            num -= 5 * val;
+        }
+
+        if(num >= 4 * val) {
+            res += one;
+            res += five;
+            num -= 4 * val;
+        }
+
+        while(num >= val) {
+            res += one;
+            num -= val;
+        }
+
+        return res;
+
+    }
+
+    string intToRoman(int num) {
+        
+        string roman = "";
+
+        roman += convertToRoman(num, 1000, 'M', '.', '.');
+        roman += convertToRoman(num, 100, 'C', 'D', 'M');
+        roman += convertToRoman(num, 10, 'X', 'L', 'C');
+        roman += convertToRoman(num, 1, 'I', 'V', 'X');
+
+        return roman;
+
+    }
+};
