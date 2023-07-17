@@ -1,0 +1,29 @@
+class Solution {
+public:
+    string reverseWords(string &str) {
+        
+        int n = str.length();
+        string ans = "";
+        vector<string> words;
+
+        for(int start = 0; start < n; start++) {
+            if(str[start] == ' ') continue;
+            int end = start;
+            while(end < n && str[end] != ' ') {
+                end++;
+            }
+            words.push_back(str.substr(start, end - start));
+            start = end;
+        }
+
+        int wordsSize = words.size();
+
+        for(int i = wordsSize - 1; i >= 0; i--) {
+            ans += words[i];
+            if(i > 0) ans += ' ';
+        }
+
+        return ans;
+
+    }
+};
